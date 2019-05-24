@@ -1,4 +1,4 @@
-import json
+import jwt.rapidjson_wrapper as json
 import os
 
 from jwt.utils import base64url_decode, force_bytes

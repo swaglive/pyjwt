@@ -3,7 +3,7 @@
 from __future__ import absolute_import, print_function
 
 import argparse
-import json
+from . import rapidjson_wrapper as json
 import sys
 import time
 

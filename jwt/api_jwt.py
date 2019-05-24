@@ -1,4 +1,4 @@
-import json
+from . import rapidjson_wrapper as json
 import warnings
 from calendar import timegm
 from datetime import datetime, timedelta
@@ -49,16 +49,8 @@ class PyJWT(PyJWS):
             raise TypeError('Expecting a mapping object, as JWT only supports '
                             'JSON objects as payloads.')
 
-        # Payload
-        for time_claim in ['exp', 'iat', 'nbf']:
-            # Convert datetime to a intDate value in known time-format claims
-            if isinstance(payload.get(time_claim), datetime):
-                payload[time_claim] = timegm(payload[time_claim].utctimetuple())  # type: ignore
-
         json_payload = json.dumps(
-            payload,
-            separators=(',', ':'),
-            cls=json_encoder
+            payload
         ).encode('utf-8')
 
         return super(PyJWT, self).encode(

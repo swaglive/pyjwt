@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import json
+from . import rapidjson_wrapper as json
 import platform
 import sys
 

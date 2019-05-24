@@ -1,5 +1,5 @@
 import binascii
-import json
+from . import rapidjson_wrapper as json
 import warnings
 try:
     # import required by mypy to perform type checking, not used for normal execution
@@ -97,9 +97,7 @@ class PyJWS(object):
 
         json_header = force_bytes(
             json.dumps(
-                header,
-                separators=(',', ':'),
-                cls=json_encoder
+                header
             )
         )
 

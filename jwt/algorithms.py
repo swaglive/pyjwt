@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-import json
+from . import rapidjson_wrapper as json
 
 
 from .compat import constant_time_compare, string_types

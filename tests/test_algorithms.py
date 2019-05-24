@@ -1,5 +1,5 @@
 import base64
-import json
+import jwt.rapidjson_wrapper as json
 
 from jwt.algorithms import Algorithm, HMACAlgorithm, NoneAlgorithm
 from jwt.exceptions import InvalidKeyError

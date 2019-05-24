@@ -1,6 +1,6 @@
 
 import argparse
-import json
+import jwt.rapidjson_wrapper as json
 import sys
 
 import jwt
