@@ -67,6 +67,5 @@ def test_decode_performance(benchmark, jwt_package, payload):
         token,
         key=secret_key,
         audience='localhost',
-        algorithms=['HS256'],
-        options={'verify_exp': False}
+        algorithms=['HS256']
     )
