@@ -11,7 +11,7 @@ import copy
 from .compat import json
 
 
-ORIG_SYS_PATH = copy.deepcopy(sys.path)
+ORIG_SYS_PATH = copy.copy(sys.path)
 SITE_PACKAGE_PATH = site.getsitepackages()
 
 @pytest.fixture(params=[
@@ -19,7 +19,7 @@ SITE_PACKAGE_PATH = site.getsitepackages()
     SITE_PACKAGE_PATH
 ], ids=['rapidjson-jwt', 'origjson-jwt'])
 def jwt_package(request):
-    sys.path = copy.deepcopy(ORIG_SYS_PATH)
+    sys.path = copy.copy(ORIG_SYS_PATH)
     sys.path = request.param + sys.path
     for m in [m for m in sys.modules if m.startswith('jwt')]:
         sys.modules.pop(m, None)
