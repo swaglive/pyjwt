@@ -1,5 +1,4 @@
 import binascii
-from . import rapidjson_wrapper as json
 import warnings
 try:
     # import required by mypy to perform type checking, not used for normal execution
@@ -10,7 +9,7 @@ except ImportError:
 from .algorithms import (
     Algorithm, get_default_algorithms, has_crypto, requires_cryptography  # NOQA
 )
-from .compat import Mapping, binary_type, string_types, text_type
+from .compat import Mapping, binary_type, string_types, text_type, json
 from .exceptions import (
     DecodeError, InvalidAlgorithmError, InvalidSignatureError,
     InvalidTokenError
@@ -97,7 +96,8 @@ class PyJWS(object):
 
         json_header = force_bytes(
             json.dumps(
-                header
+                header,
+                default=json_encoder().default if json_encoder else None
             )
         )
 

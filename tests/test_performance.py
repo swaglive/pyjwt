@@ -1,21 +1,31 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import site
 import importlib
 import pytest
 import datetime
 import functools
-import json
+import copy
+
+from .compat import json
 
 
-# !NOTE! Below method of 'Import two packages with the same name' is incorrect
-# After below 4 lines, although jwt_rapidjson.__file__ and jwt_orig.__file__ is different.
-# But, the internal behavior will be both implement by rapidjson
-# TODO, we need find a good way to modify the name in sys.modules
-jwt_rapidjson = importlib.import_module('jwt')
-sys.path = list(filter(lambda p: p != os.getcwd(), sys.path))
-orig_module = sys.modules.pop('jwt')
-jwt_orig = importlib.import_module('jwt')
+ORIG_SYS_PATH = copy.deepcopy(sys.path)
+SITE_PACKAGE_PATH = site.getsitepackages()
+
+@pytest.fixture(params=[
+    [],
+    SITE_PACKAGE_PATH
+], ids=['rapidjson-jwt', 'origjson-jwt'])
+def jwt_package(request):
+    sys.path = copy.deepcopy(ORIG_SYS_PATH)
+    sys.path = request.param + sys.path
+    for m in [m for m in sys.modules if m.startswith('jwt')]:
+        sys.modules.pop(m, None)
+
+    import jwt
+    yield jwt
 
 
 data = {
@@ -29,6 +39,7 @@ data = {
     }
 }
 
+# NOTE, We don't need this when use rapidjson, should I put it in to jwt_package?
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, set):
@@ -58,31 +69,23 @@ headers = {
 secret_key = 'secret'
 
 # @pytest.mark.skip()
-@pytest.mark.parametrize('jwt', [
-    jwt_rapidjson,
-    jwt_orig
-], ids=['jwt_rapidjson.encode', 'jwt_orig.encode'])
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
-def test_jwt_encode_performance(benchmark, jwt, payload):
+def test_encode_performance(benchmark, jwt_package, payload):
     benchmark(
-        jwt.encode,
+        jwt_package.encode,
         payload,
         key=secret_key,
         algorithm='HS256',
         headers=headers,
-        json_encoder=CustomJSONEncoder
+        # json_encoder=CustomJSONEncoder
     )
 
 
-@pytest.mark.parametrize('jwt', [
-    jwt_rapidjson,
-    jwt_orig
-], ids=['jwt_rapidjson.decode', 'jwt_orig.decode'])
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
-def test_decode(benchmark, jwt, payload):
-    token = jwt_orig.encode(payload, key=secret_key, headers=headers, json_encoder=CustomJSONEncoder).decode('utf-8')
+def test_decode_performance(benchmark, jwt_package, payload):
+    token = jwt_package.encode(payload, key=secret_key, headers=headers, json_encoder=CustomJSONEncoder).decode('utf-8')
     benchmark(
-        jwt.decode,
+        jwt_package.decode,
         token,
         key=secret_key,
         audience='localhost',

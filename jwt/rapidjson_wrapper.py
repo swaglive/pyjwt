@@ -12,6 +12,10 @@ from rapidjson import (
     dumps, loads,
 )
 
+from json import (
+    JSONDecoder, JSONEncoder
+)
+
 
 dumps = functools.partial(
     dumps,

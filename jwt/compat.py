@@ -66,3 +66,7 @@ else:
 
         buf.reverse()
         return struct.pack('%sB' % len(buf), *buf)
+
+
+
+from . import rapidjson_wrapper as json

@@ -10,3 +10,6 @@ if PY3:
 else:
     string_types = basestring,
     text_type = unicode
+
+
+from jwt.compat import json

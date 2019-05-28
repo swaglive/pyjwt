@@ -1,4 +1,3 @@
-from . import rapidjson_wrapper as json
 import warnings
 from calendar import timegm
 from datetime import datetime, timedelta
@@ -10,7 +9,7 @@ except ImportError:
 
 from .api_jws import PyJWS
 from .algorithms import Algorithm, get_default_algorithms  # NOQA
-from .compat import Iterable, Mapping, string_types
+from .compat import Iterable, Mapping, string_types, json
 from .exceptions import (
     DecodeError, ExpiredSignatureError, ImmatureSignatureError,
     InvalidAudienceError, InvalidIssuedAtError,
@@ -50,7 +49,8 @@ class PyJWT(PyJWS):
                             'JSON objects as payloads.')
 
         json_payload = json.dumps(
-            payload
+            payload,
+            default=json_encoder().default if json_encoder else None
         ).encode('utf-8')
 
         return super(PyJWT, self).encode(
