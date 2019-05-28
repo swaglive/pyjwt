@@ -50,7 +50,8 @@ class PyJWT(PyJWS):
 
         json_payload = json.dumps(
             payload,
-            default=json_encoder().default if json_encoder else None
+            separators=(',', ':'),
+            cls=json_encoder
         ).encode('utf-8')
 
         return super(PyJWT, self).encode(

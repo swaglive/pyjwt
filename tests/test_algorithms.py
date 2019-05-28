@@ -1,4 +1,5 @@
 import base64
+import json
 
 from jwt.algorithms import Algorithm, HMACAlgorithm, NoneAlgorithm
 from jwt.exceptions import InvalidKeyError
@@ -8,7 +9,7 @@ import pytest
 
 from .keys import load_hmac_key
 from .utils import key_path
-from .compat import json
+
 
 try:
     from jwt.algorithms import RSAAlgorithm, ECAlgorithm, RSAPSSAlgorithm

@@ -1,6 +1,6 @@
 
 import argparse
-from .compat import json
+import json
 import sys
 
 import jwt

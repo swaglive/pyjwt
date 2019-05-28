@@ -53,7 +53,7 @@ setup(
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]
     ),
-    install_requires=['python-rapidjson'],
+    install_requires=['python-rapidjson >= 0.7.1'],
     long_description=long_description,
     classifiers=[
         'Development Status :: 5 - Production/Stable',

@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-import os
 import sys
 import site
-import importlib
 import pytest
 import datetime
-import functools
 import copy
-
-from .compat import json
 
 
 ORIG_SYS_PATH = copy.copy(sys.path)
@@ -22,7 +17,9 @@ def jwt_package(request):
     sys.path = copy.copy(ORIG_SYS_PATH)
     sys.path = request.param + sys.path
 
-    for m in [m for m in sys.modules if m.startswith('jwt')]:
+    # In order to avoid RuntimeError: dictionary changed size during iteration
+    jwt_modules = [m for m in sys.modules if m.startswith('jwt')]
+    for m in jwt_modules:
         sys.modules.pop(m, None)
 
     import jwt
@@ -35,7 +32,7 @@ data = {
         'iss': 'localhost',
         'aud': 'localhost',
         'iat': datetime.datetime.utcnow(),
-        'exp': datetime.datetime.utcnow(),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=8),
         'sub': '5c222ab8663b5e5749e5c3de',
         'scopes': ['accessToken.create', 'curator', 'signed:personal', 'vip', 'beta']
     }
@@ -50,7 +47,7 @@ headers = {
 
 secret_key = 'secret'
 
-# @pytest.mark.skip()
+
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
 def test_encode_performance(benchmark, jwt_package, payload):
     benchmark(

@@ -1,5 +1,5 @@
 
-from .compat import json
+import json
 from decimal import Decimal
 
 from jwt.algorithms import Algorithm

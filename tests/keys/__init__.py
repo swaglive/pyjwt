@@ -1,10 +1,9 @@
+import json
 import os
 
 from jwt.utils import base64url_decode, force_bytes
 
 from tests.utils import int_from_bytes
-
-from jwt.compat import json
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
