@@ -21,6 +21,7 @@ SITE_PACKAGE_PATH = site.getsitepackages()
 def jwt_package(request):
     sys.path = copy.copy(ORIG_SYS_PATH)
     sys.path = request.param + sys.path
+
     for m in [m for m in sys.modules if m.startswith('jwt')]:
         sys.modules.pop(m, None)
 
