@@ -10,7 +10,6 @@ import pytest
 from .keys import load_hmac_key
 from .utils import key_path
 
-
 try:
     from jwt.algorithms import RSAAlgorithm, ECAlgorithm, RSAPSSAlgorithm
     from .keys import load_rsa_pub_key, load_ec_pub_key
