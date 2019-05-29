@@ -110,31 +110,22 @@ secret_key = 'secret'
 
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
 def test_encode_performance(benchmark, jwt_package, payload):
-    benchmark.pedantic(
+    benchmark(
         jwt_package.encode,
-        args=[payload],
-        kwargs={
-            'key': secret_key,
-            'algorithm': 'HS256',
-            'headers': headers
-        },
-        rounds=10000,
-        iterations=5
+        payload,
+        key=secret_key,
+        algorithm='HS256',
+        headers=headers
     )
 
 
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
 def test_decode_performance(benchmark, jwt_package, payload):
     token = jwt_package.encode(payload, key=secret_key, headers=headers).decode('utf-8')
-    benchmark.pedantic(
+    benchmark(
         jwt_package.decode,
-        args=[token],
-        kwargs={
-            'key': secret_key,
-            'audience': 'localhost',
-            'algorithms': ['HS256'],
-            'options': {'verify_exp': False}
-        },
-        rounds=10000,
-        iterations=5
+        token,
+        key=secret_key,
+        audience='localhost',
+        algorithms=['HS256'],
     )
