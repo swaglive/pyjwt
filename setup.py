@@ -37,6 +37,7 @@ tests_require = [
     'pytest-cov>=2.6.0,<3.0.0',
     'pytest-runner>=4.2,<5.0.0',
     'pytest-benchmark>=3.2',
+    'pytest-mock>=1.10.4',
 ]
 
 needs_pytest = set(('pytest', 'test', 'ptr')).intersection(sys.argv)
