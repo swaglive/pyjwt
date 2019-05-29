@@ -1,4 +1,5 @@
 import warnings
+import functools
 from calendar import timegm
 from datetime import datetime, timedelta
 try:
@@ -50,8 +51,10 @@ class PyJWT(PyJWS):
 
         json_payload = json.dumps(
             payload,
-            separators=(',', ':'),
-            cls=json_encoder
+            **({} if isinstance(json.dumps, functools.partial) else {
+                'separators': (',', ':'),
+                'cls': json_encoder
+            })
         ).encode('utf-8')
 
         return super(PyJWT, self).encode(

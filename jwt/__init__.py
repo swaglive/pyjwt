@@ -18,7 +18,7 @@ __copyright__ = 'Copyright 2015-2018 José Padilla'
 
 from .api_jwt import (
     encode, decode, register_algorithm, unregister_algorithm,
-    get_unverified_header, PyJWT
+    get_unverified_header, PyJWT, json
 )
 from .api_jws import PyJWS
 from .exceptions import (

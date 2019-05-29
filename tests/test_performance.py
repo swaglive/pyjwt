@@ -9,20 +9,24 @@ import copy
 ORIG_SYS_PATH = copy.copy(sys.path)
 SITE_PACKAGE_PATH = site.getsitepackages()
 
+
 @pytest.fixture(params=[
     [],
+    [],
     SITE_PACKAGE_PATH
-], ids=['rapidjson-jwt', 'origjson-jwt'])
-def jwt_package(request):
+], ids=['rapid-partial-jwt', 'rapid-wrapper-jwt', 'origjson-jwt'])
+def jwt_package(request, mocker):
     sys.path = copy.copy(ORIG_SYS_PATH)
     sys.path = request.param + sys.path
 
-    # In order to avoid RuntimeError: dictionary changed size during iteration
     jwt_modules = [m for m in sys.modules if m.startswith('jwt')]
     for m in jwt_modules:
         sys.modules.pop(m, None)
 
     import jwt
+    if request.param_index == 0:
+        mocker.patch.object(jwt.json, 'dumps', jwt.json.partial_dumps)
+        mocker.patch.object(jwt.json, 'loads', jwt.json.partial_loads)
     yield jwt
 
 
@@ -110,6 +114,9 @@ secret_key = 'secret'
 
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
 def test_encode_performance(benchmark, jwt_package, payload):
+    json_mod = getattr(jwt_package, 'json', None)
+    json_func = getattr(json_mod, 'dumps', None) if json_mod else None
+    print('\nCurrent JWT Lib: %s, dumps: %s' % (jwt_package, json_func))
     benchmark(
         jwt_package.encode,
         payload,
@@ -121,6 +128,9 @@ def test_encode_performance(benchmark, jwt_package, payload):
 
 @pytest.mark.parametrize('payload', list(data.values()), ids=list(data.keys()))
 def test_decode_performance(benchmark, jwt_package, payload):
+    json_mod = getattr(jwt_package, 'json', None)
+    json_func = getattr(json_mod, 'loads', None) if json_mod else None
+    print('\nCurrent JWT Lib: %s, loads: %s' % (jwt_package, json_func))
     token = jwt_package.encode(payload, key=secret_key, headers=headers).decode('utf-8')
     benchmark(
         jwt_package.decode,

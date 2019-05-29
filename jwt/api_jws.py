@@ -1,5 +1,6 @@
 import binascii
 import warnings
+import functools
 try:
     # import required by mypy to perform type checking, not used for normal execution
     from typing import Callable, Dict, List, Optional, Union # NOQA
@@ -96,11 +97,14 @@ class PyJWS(object):
 
         json_header = force_bytes(
             json.dumps(
-                header,
-                separators=(',', ':'),
-                cls=json_encoder
-            )
+            header,
+            **({} if isinstance(json.dumps, functools.partial) else {
+                'separators': (',', ':'),
+                'cls': json_encoder
+            })
         )
+        )
+
 
         segments.append(base64url_encode(json_header))
         segments.append(base64url_encode(payload))
