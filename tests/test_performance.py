@@ -12,9 +12,8 @@ SITE_PACKAGE_PATH = site.getsitepackages()
 
 @pytest.fixture(params=[
     [],
-    [],
     SITE_PACKAGE_PATH
-], ids=['rapid-partial-jwt', 'rapid-wrapper-jwt', 'origjson-jwt'])
+], ids=['rapid-wrapper-jwt', 'origjson-jwt'])
 def jwt_package(request, mocker):
     sys.path = copy.copy(ORIG_SYS_PATH)
     sys.path = request.param + sys.path
@@ -24,14 +23,11 @@ def jwt_package(request, mocker):
         sys.modules.pop(m, None)
 
     import jwt
-    if request.param_index == 0:
-        mocker.patch.object(jwt.json, 'dumps', jwt.json.partial_dumps)
-        mocker.patch.object(jwt.json, 'loads', jwt.json.partial_loads)
     yield jwt
 
 
 data = {
-    'token-1': {
+    'token': {
         'jti': 'XCIquGY7XldJ5cPe',
         'iss': 'localhost',
         'aud': 'localhost',
@@ -99,6 +95,37 @@ data = {
             "sender": "5bc434dbd8f9b139c89172ce",
             "unlock_price": 240
         }]
+    },
+    'medium': {
+        'aud': 'localhost',
+        "_id": "585836a84b287b5022a54304",
+        "media": {
+            "url": "https://storage.googleapis.com/asia.contents.swag.live/messages/585836a84b287b5022a54304.320p.mp4",
+            "mimetype": "video/mp4",
+            "presets": {
+                "hls": "https://storage.googleapis.com/asia.contents.swag.live/messages/585836a84b287b5022a54304.m3u8",
+                "dash": "https://storage.googleapis.com/asia.contents.swag.live/messages/585836a84b287b5022a54304.mpd",
+                "blurred": "https://storage.googleapis.com/asia.contents.swag.live/messages/585836a84b287b5022a54304.320p-blurred.mp4",
+                "320p": "https://storage.googleapis.com/asia.contents.swag.live/messages/585836a84b287b5022a54304.320p.mp4"
+            }
+        },
+        "pricing": {
+            "unlock": 0
+        },
+        "sender": '57c1170c0192fa5b9d4d1328',
+        "caption": {
+            "text": "祝大家今天都有美好的一天❤️❤️❤️",
+            "y": 68
+        },
+        "_cls": "Message",
+        "delivered": True,
+        "tags": [
+            "preset:hls",
+            "preset:dash",
+            "preset:blurred",
+            "preset:320p",
+            "feed:non-asia"
+        ]
     }
 }
 

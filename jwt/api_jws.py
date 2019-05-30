@@ -97,12 +97,10 @@ class PyJWS(object):
 
         json_header = force_bytes(
             json.dumps(
-            header,
-            **({} if isinstance(json.dumps, functools.partial) else {
-                'separators': (',', ':'),
-                'cls': json_encoder
-            })
-        )
+                header,
+                separators=(',', ':'),
+                cls=json_encoder
+            )
         )
 
 
