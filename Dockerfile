@@ -1,4 +1,4 @@
-FROM        python:3.6.8-alpine3.7
+FROM        python:3.7.3-alpine3.8
 
 ARG         PIP_DISABLE_PIP_VERSION_CHECK=on
 
