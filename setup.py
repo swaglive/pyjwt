@@ -36,6 +36,7 @@ tests_require = [
     'pytest>=4.0.1,<5.0.0',
     'pytest-cov>=2.6.0,<3.0.0',
     'pytest-runner>=4.2,<5.0.0',
+    'pytest-benchmark>=3.2'
 ]
 
 needs_pytest = set(('pytest', 'test', 'ptr')).intersection(sys.argv)
@@ -53,6 +54,7 @@ setup(
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]
     ),
+    install_requires=['python-rapidjson >= 0.7.1'],
     long_description=long_description,
     classifiers=[
         'Development Status :: 5 - Production/Stable',

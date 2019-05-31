@@ -1,9 +1,8 @@
 import hashlib
 import hmac
-import json
 
 
-from .compat import constant_time_compare, string_types
+from .compat import constant_time_compare, string_types, json
 from .exceptions import InvalidKeyError
 from .utils import (
     base64url_decode, base64url_encode, der_to_raw_signature,

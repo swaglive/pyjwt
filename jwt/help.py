@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import json
+from .compat import json
 import platform
 import sys
 

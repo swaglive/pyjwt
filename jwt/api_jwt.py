@@ -1,4 +1,4 @@
-import json
+
 import warnings
 from calendar import timegm
 from datetime import datetime, timedelta
@@ -10,7 +10,7 @@ except ImportError:
 
 from .api_jws import PyJWS
 from .algorithms import Algorithm, get_default_algorithms  # NOQA
-from .compat import Iterable, Mapping, string_types
+from .compat import Iterable, Mapping, string_types, json
 from .exceptions import (
     DecodeError, ExpiredSignatureError, ImmatureSignatureError,
     InvalidAudienceError, InvalidIssuedAtError,
@@ -48,12 +48,6 @@ class PyJWT(PyJWS):
         if not isinstance(payload, Mapping):
             raise TypeError('Expecting a mapping object, as JWT only supports '
                             'JSON objects as payloads.')
-
-        # Payload
-        for time_claim in ['exp', 'iat', 'nbf']:
-            # Convert datetime to a intDate value in known time-format claims
-            if isinstance(payload.get(time_claim), datetime):
-                payload[time_claim] = timegm(payload[time_claim].utctimetuple())  # type: ignore
 
         json_payload = json.dumps(
             payload,
