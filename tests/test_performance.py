@@ -14,7 +14,7 @@ SITE_PACKAGE_PATH = site.getsitepackages()
     [],
     SITE_PACKAGE_PATH
 ], ids=['rapid-wrapper-jwt', 'origjson-jwt'])
-def jwt_package(request, mocker):
+def jwt_package(request):
     sys.path = copy.copy(ORIG_SYS_PATH)
     sys.path = request.param + sys.path
 
