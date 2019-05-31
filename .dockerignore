@@ -1,0 +1,15 @@
+.*
+*.p12
+*.json
+*.yaml
+*.yml
+*.md
+*.pid
+
+**/*.pyo
+**/*.pyc
+
+build/
+dist/
+PyJWT.egg-info/
+

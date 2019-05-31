@@ -1,5 +1,5 @@
+
 import warnings
-import functools
 from calendar import timegm
 from datetime import datetime, timedelta
 try:

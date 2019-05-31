@@ -33,18 +33,3 @@ def loads(string, encoding=None, cls=None, object_hook=None, parse_float=None, p
         number_mode=NM_NATIVE, datetime_mode=DM_ISO8601 | DM_SHIFT_TO_UTC,
         uuid_mode=None, parse_mode=None, allow_nan=False)
 
-
-partial_dumps = functools.partial(
-    _dumps,
-    indent=None,
-    ensure_ascii=False,
-    number_mode=NM_NATIVE,
-    datetime_mode=DM_UNIX_TIME | DM_NAIVE_IS_UTC | DM_ONLY_SECONDS,
-)
-
-
-partial_loads = functools.partial(
-    _loads,
-    number_mode=NM_NATIVE, allow_nan=False,
-    datetime_mode=DM_ISO8601 | DM_SHIFT_TO_UTC,
-)
